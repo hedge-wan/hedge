@@ -11,6 +11,6 @@ Note: All `transponder_data.csv` files are in `timestamp, channel, ber, fec, inp
 Code and data for the software evaluation of HEDGE-AGG are available in the `hedge-agg/` folder. The requirements are `pickle`, `matplotlib`, and `numpy`.
 - `analysis.ipynb` generates all subplots for Figure 6.
 - `snr_data.pkl` contains real SNR data collected over 15 minute intervals for several months in an ISP WAN. This file contains a dictionary in which each key is an anonymized wavelength identifier and each value is a list of SNR values for that wavelength (in chronological order).
-- `snr_thresholds.pkl` contains the SNR cutoff thresholds to sustain different data rates for 50 GHz spectral width and 32 GBaud baud rate. The file contains a list in which the value at index $i$ is the minimum SNR needed to sustain a data rate of $50 * i Gbps$.
+- `snr_thresholds.pkl` contains the SNR cutoff thresholds to sustain different data rates for 50 GHz spectral width and 32 GBaud baud rate. The file contains a list in which the value at index $i$ is the minimum SNR needed to sustain a data rate of $50 * i$ Gbps.
 
 ## HEDGE-TE
