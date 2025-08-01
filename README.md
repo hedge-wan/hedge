@@ -2,12 +2,31 @@
 ## Getting Started Instructions
 Install the necessary pacakges with `pip install -r requirements.txt`.
 
+We provide code and data to produce results from the main paper, for all of HEDGE-AGG and for the publicly available topologies for HEDGE-TE. To use the 
+HEDGE-AGG optimization algorithm, simply follow an example like this and run the Python script:
+```
+from wavelength_aggregation import capacity_provisioning_alg
+
+NUM_WAVELENGTHS = 50
+MAX_CAPACITY = 5000  # in Gbps
+MIN_CAPACITY = 3000  # in Gbps
+
+AVAILABILITY_TARGET = 0.99
+
+capacity_dist = {} 
+# Returns the number of wavelengths to operate at each data rate (i.e., modulation format)
+counts = capacity_provisioning_alg(capacity_dist, NUM_WAVELENGTHS, MAX_CAPACITY, MIN_CAPACITY, target)
+print(counts)
+```
+
+To use the HEDGE-TE optimization algorithm, simply 
+
 ## Detailed Instructions
 ### Hardware Experiments
 Code and data for hardware experiments are available in the `hardware-experiments/` folder. The only requirements are `numpy` and `matplotlib`. 
 - `fiber_bend_wavelengths.ipynb` generates Figures 4a and 4b. The data for this experiment can be found in the `hardware-experiments/data/wdl/` folder.
 - `fiber_bend_modulation_formats.ipynb` generates Figure 4c. The data for this experiment can be found in the `hardware-experiments/data/mod_formats/` folder.
-- `prototype.ipynb` generates Figure 7b and 7c. The data for this experiment can be found in the `hardware-experiments/data/prototype/` folder.
+- `prototype.ipynb` generates Figure 14b and 14c. The data for this experiment can be found in the `hardware-experiments/data/prototype/` folder.
 
 Note: All `transponder_data.csv` files are in `timestamp, channel, ber, fec, input_power` format.
 
@@ -22,6 +41,6 @@ Code and data for the evaluation of HEDGE-TE are available in the `hedge-te/` fo
 - Raw results from our evaluations on B4 and ATT are available in the `hedge-te/data/results/<topology>` folders (`analyze_results.ipynb` directly queries these). There are 10 results files for each topology since we ran the 1000 simulations for each of the 10 random permutations (of the capacity distribution-to-link mapping) for each topology.
 - To run our extensive experiments from scratch yourself, you can run the `run_experiments.py` script, which has the usage: `python run_experiments.py <path_to_stochastic_topology_file> <path_to_demand_file> <path_to_results_file>`. The demand matrix and fixed topology (just showing the network structure, without link capacity distributions) files for B4 and ATT are available in the `hedge-te/data/inputs/<topology>` folders. `<path_to_results_file>` is completely up to your choosing.
 
-Unfortunately, we are not yet able to provide data for CloudWAN due to confidentiality requirements, so we cannot provide the link capacity distributions for all topologies, since these are directly matched from CloudWAN data for link capacity fluctuations. To create your own stochastic topology (i.e., the first command-line argument for `run_experiments.py` script), you can create a `pickle` file containing a `dict` with format `{<directed_edge>: {<capacity1>: <prob1>, <capacity2>, <prob2>,...}, ...}` where the `<directed_edge>` key is a `(str, str)` tuple for a WAN link and the value is a `dict` mapping capacities (in Gbps) to probabilities for that link. For example, `{('1', '2'): {1000: 0.99, 800: 0.009, 0: 0.001}, ('2', '1'): {1000: 0.995, 500: 0.005}}`.
+Unfortunately, we cannot provide data for CloudWAN due to confidentiality requirements; this means we cannot provide the link capacity distributions for all topologies, since these are directly matched from CloudWAN data for link capacity fluctuations. To create your own stochastic topology (i.e., the first command-line argument for `run_experiments.py` script), you can create a `pickle` file containing a `dict` with format `{<directed_edge>: {<capacity1>: <prob1>, <capacity2>, <prob2>,...}, ...}` where the `<directed_edge>` key is a `(str, str)` tuple for a WAN link and the value is a `dict` mapping capacities (in Gbps) to probabilities for that link. For example, `{('1', '2'): {1000: 0.99, 800: 0.009, 0: 0.001}, ('2', '1'): {1000: 0.995, 500: 0.005}}`.
 
 Demands and topologies for ATT and B4 are directly sourced from the [TeaVaR repository](https://github.com/manyaghobadi/teavar/tree/master).
