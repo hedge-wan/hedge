@@ -22,7 +22,7 @@ def gen_prob_dist(link_snrs, snr_thresholds):
     return prob_dist
 
 # use the intuitive algorithm described in Section 4.1 of the paper to solve the wavelength aggregation problem
-def bin_packing_algorithm(capacity_distribution, num_wavelengths, max_capacity, min_capacity, availability_pct):
+def capacity_provisioning_alg(capacity_distribution, num_wavelengths, max_capacity, min_capacity, availability_pct):
     scenarios = []
     arg_scenarios = []
 
@@ -65,7 +65,7 @@ def bin_packing_algorithm(capacity_distribution, num_wavelengths, max_capacity, 
     return assignments
 
 # use the formal LP in Appendix A.3 to solve the wavelength aggregation problem
-def bin_packing_lp(data_rates, num_wavelengths, max_capacity, min_capacity, availability_pct):
+def capacity_provisioning_lp(data_rates, num_wavelengths, max_capacity, min_capacity, availability_pct):
     import gurobipy as gp
     model = gp.Model("LAG")
     
