@@ -3,23 +3,41 @@
 Install the necessary pacakges with `pip install -r requirements.txt`.
 
 We provide code and data to produce results from the main paper, for all of HEDGE-AGG and for the publicly available topologies for HEDGE-TE. To use the 
-HEDGE-AGG optimization algorithm, simply follow an example like this and run the Python script:
+HEDGE-AGG optimization algorithm, execute a Python script like this to print the results:
 ```
 from wavelength_aggregation import capacity_provisioning_alg
 
 NUM_WAVELENGTHS = 50
 MAX_CAPACITY = 5000  # in Gbps
 MIN_CAPACITY = 3000  # in Gbps
+AVAILABILITY_TARGET = 0.991  # e.g., 99.1% availability
 
-AVAILABILITY_TARGET = 0.99
-
-capacity_dist = {} 
+ # Probability of a wavelength operating at each data rate (s_i in the paper) given the SNR
+capacity_dist = {250: 0.99, 0: 0.005, 150: 0.004, 200: 0.001}
 # Returns the number of wavelengths to operate at each data rate (i.e., modulation format)
 counts = capacity_provisioning_alg(capacity_dist, NUM_WAVELENGTHS, MAX_CAPACITY, MIN_CAPACITY, target)
 print(counts)
 ```
 
-To use the HEDGE-TE optimization algorithm, simply 
+To use the HEDGE-TE optimization algorithm, first create a `pickle` file with the stochastic topology, a `dict` with format `{<directed_edge>: {<capacity1>: <prob1>, <capacity2>, <prob2>,...}, ...}` where the `<directed_edge>` key is a `(str, str)` tuple for a WAN link and the value is a `dict` mapping capacities (in Gbps) to probabilities for that link. Then, create a folder for your topology, exactly named, in the `/hedge-te/data/inputs` directory with the appropriate `edges.txt` and `demand.txt` files (see provided examples). Then, execute a Python script like this:
+```
+from NetworkTopology import *
+from NetworkParser import *
+from solver import *
+from util import *
+
+TOPOLOGY_FILENAME = "<PATH/TO/STOCHASTIC/TOPOLOGY/PKL>"
+NETWORK_NAME = "<NAME OF NETWORK>"
+DEMAND_FILENAME = "<PATH/TO/demand.txt>"
+
+network,_ = get_max_and_min_networks(NETWORK_NAME, TOPOLOGY_NAME)
+link_capacity_distributions = get_link_capacity_distributions_with_filename(topology_filename)
+parse_demands(network, demand_filename, scale=demand_scale)
+parse_tunnels(network)  # Default: 4 shortest paths
+results = solve_hedge(network, link_capacity_distributions)
+# Print bandwidth allocations along tunnels
+print(results)
+```
 
 ## Detailed Instructions
 ### Hardware Experiments
